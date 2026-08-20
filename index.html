@@ -316,6 +316,37 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 @media print{
   .pgnav,.pgbar{display:none!important}
   #result.paged .sec{display:block!important}
+  .cells .cell,.du-card{animation:none!important; opacity:1!important; transform:none!important}
+}
+
+/* ── 결과 마이크로 모션 (페이지 열릴 때) ── */
+@keyframes cellpop{from{opacity:0; transform:scaleX(.25)} to{opacity:1; transform:none}}
+#result.paged .sec.page-on .cells .cell{animation:cellpop .35s ease both; transform-origin:left}
+.cells .cell:nth-child(1){animation-delay:.04s}
+.cells .cell:nth-child(2){animation-delay:.08s}
+.cells .cell:nth-child(3){animation-delay:.12s}
+.cells .cell:nth-child(4){animation-delay:.16s}
+.cells .cell:nth-child(5){animation-delay:.20s}
+.cells .cell:nth-child(6){animation-delay:.24s}
+.cells .cell:nth-child(7){animation-delay:.28s}
+.cells .cell:nth-child(8){animation-delay:.32s}
+@keyframes duin{from{opacity:0; transform:translateX(14px)} to{opacity:1; transform:none}}
+#result.paged .sec.page-on .du-card{animation:duin .45s ease both}
+.du-strip .du-card:nth-child(1){animation-delay:.04s}
+.du-strip .du-card:nth-child(2){animation-delay:.08s}
+.du-strip .du-card:nth-child(3){animation-delay:.12s}
+.du-strip .du-card:nth-child(4){animation-delay:.16s}
+.du-strip .du-card:nth-child(5){animation-delay:.20s}
+.du-strip .du-card:nth-child(6){animation-delay:.24s}
+.du-strip .du-card:nth-child(7){animation-delay:.28s}
+.du-strip .du-card:nth-child(8){animation-delay:.32s}
+.du-strip .du-card:nth-child(9){animation-delay:.36s}
+.du-strip .du-card:nth-child(10){animation-delay:.40s}
+.du-strip .du-card:nth-child(11){animation-delay:.44s}
+.du-strip .du-card:nth-child(12){animation-delay:.48s}
+@media (prefers-reduced-motion: reduce){
+  #result.paged .sec.page-on .cells .cell,
+  #result.paged .sec.page-on .du-card{animation:none}
 }
 </style>
 
@@ -1113,7 +1144,18 @@ function gunghap(){
              score>=70?'잘 어울리는 짝 — 아끼는 만큼 오래갑니다':
              score>=55?'노력으로 빛나는 짝 — 다름을 배우면 단단해집니다':
              '서로를 성장시키는 인연 — 부딪힘이 두 사람을 키웁니다';
-  $('ghScore').textContent=score;
+  const gsEl=$('ghScore');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ gsEl.textContent=score; }
+  else{ // 점수 카운트업 (0.9초, 감속 곡선) — 기준 시각은 첫 rAF 타임스탬프
+    const DUR=900, target=score; let t0=null;
+    gsEl.textContent='0';
+    requestAnimationFrame(function tick(n){
+      if(t0===null)t0=n;
+      const p=Math.max(0,Math.min(1,(n-t0)/DUR)), ease=1-Math.pow(1-p,3);
+      gsEl.textContent=Math.round(target*ease);
+      if(p<1)requestAnimationFrame(tick);
+    });
+  }
   $('ghBand').innerHTML=`<b>${band.split(' — ')[0]}</b> — ${band.split(' — ')[1]}`;
   $('ghPair').innerHTML=`<div class="p"><div class="who">나 · 일간</div><div class="dsg" style="color:${EL[STEM_EL[r.ds]].c}">${STEM_H[r.ds]}</div></div>
     <span class="amp">♥</span>
@@ -1845,28 +1887,66 @@ const PAGER=(()=>{
   return{open,go};
 })();
 
-/* ───────── 별하늘 (정적 캔버스) ───────── */
+/* ───────── 별하늘 (살아있는 캔버스 — 반짝임·별똥별) ───────── */
 (function sky(){
   const c=$('sky'),x=c.getContext('2d');
-  function draw(){
-    const w=c.width=innerWidth*devicePixelRatio, h=c.height=innerHeight*devicePixelRatio;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const PTS=[[.12,.18],[.17,.15],[.22,.155],[.27,.19],[.305,.24],[.355,.235],[.40,.27]];
+  let stars=[],w=0,h=0,dpr=1,shoot=null,nextShoot=0;
+  function build(){
+    dpr=devicePixelRatio||1;
+    w=c.width=innerWidth*dpr; h=c.height=innerHeight*dpr;
     c.style.width=innerWidth+'px'; c.style.height=innerHeight+'px';
-    x.clearRect(0,0,w,h);
     let seed=42; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
-    for(let i=0;i<160;i++){
-      const px=rnd()*w,py=rnd()*h,rr=rnd();
-      x.beginPath(); x.arc(px,py,(rr*1.1+.3)*devicePixelRatio,0,7);
-      x.fillStyle=`rgba(233,228,216,${.04+rr*.10})`; x.fill();
+    stars=[];
+    for(let i=0;i<160;i++)
+      stars.push({px:rnd()*w, py:rnd()*h, rr:rnd(), ph:Math.random()*6.28, sp:.4+Math.random()*.9});
+  }
+  function paint(t){
+    x.clearRect(0,0,w,h);
+    for(const s of stars){
+      const tw=(t!=null&&s.rr>.55)?Math.sin(t*.001*s.sp+s.ph)*.05:0; // 밝은 별만 은은히 숨쉼
+      x.beginPath(); x.arc(s.px,s.py,(s.rr*1.1+.3)*dpr,0,7);
+      x.fillStyle=`rgba(233,228,216,${Math.max(.02,.04+s.rr*.10+tw)})`; x.fill();
     }
     // 북두칠성 비슷한 잔별 자리 하나 (은은한 금선)
-    const pts=[[.12,.18],[.17,.15],[.22,.155],[.27,.19],[.305,.24],[.355,.235],[.40,.27]];
-    x.strokeStyle='rgba(201,169,97,.13)'; x.lineWidth=1*devicePixelRatio; x.beginPath();
-    pts.forEach((p,i)=>{const X=p[0]*w,Y=p[1]*h; i?x.lineTo(X,Y):x.moveTo(X,Y);});
+    x.strokeStyle='rgba(201,169,97,.13)'; x.lineWidth=1*dpr; x.beginPath();
+    PTS.forEach((p,i)=>{const X=p[0]*w,Y=p[1]*h; i?x.lineTo(X,Y):x.moveTo(X,Y);});
     x.stroke();
-    pts.forEach(p=>{x.beginPath();x.arc(p[0]*w,p[1]*h,1.6*devicePixelRatio,0,7);
+    PTS.forEach(p=>{x.beginPath();x.arc(p[0]*w,p[1]*h,1.6*dpr,0,7);
       x.fillStyle='rgba(201,169,97,.35)';x.fill();});
+    // 별똥별 — 이따금 좌하향으로 한 줄기
+    if(t!=null){
+      if(!shoot&&t>nextShoot){
+        const ang=Math.PI*(.72+Math.random()*.16);
+        shoot={sx:(.2+Math.random()*.65)*w, sy:(.05+Math.random()*.25)*h,
+               vx:Math.cos(ang), vy:Math.sin(ang), t0:t, life:900};
+      }
+      if(shoot){
+        const p=(t-shoot.t0)/shoot.life;
+        if(p>=1){ shoot=null; nextShoot=t+16000+Math.random()*26000; }
+        else{
+          const dist=p*.22*w, tail=.05*w*(1-p*.5);
+          const X=shoot.sx+shoot.vx*dist, Y=shoot.sy+shoot.vy*dist;
+          const g=x.createLinearGradient(X-shoot.vx*tail,Y-shoot.vy*tail,X,Y);
+          g.addColorStop(0,'rgba(233,228,216,0)');
+          g.addColorStop(1,`rgba(233,228,216,${.5*(1-p)})`);
+          x.strokeStyle=g; x.lineWidth=1.1*dpr; x.beginPath();
+          x.moveTo(X-shoot.vx*tail,Y-shoot.vy*tail); x.lineTo(X,Y); x.stroke();
+        }
+      }
+    }
   }
-  draw(); addEventListener('resize',draw);
+  let last=0;
+  function loop(t){
+    if(!reduced.matches&&!document.hidden&&t-last>33){ last=t; paint(t); } // ~30fps
+    requestAnimationFrame(loop);
+  }
+  build(); paint(null);
+  nextShoot=performance.now()+9000+Math.random()*15000;
+  requestAnimationFrame(loop);  // 루프는 1회만 기동 — reduced/숨김 상태는 내부 가드가 처리
+  if(reduced.addEventListener) reduced.addEventListener('change',()=>{ if(reduced.matches)paint(null); });
+  addEventListener('resize',()=>{build(); paint(null);});
 })();
 
 fillSelects();
