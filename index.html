@@ -282,6 +282,41 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
   font-size:12.5px; color:var(--muted); max-width:70ch;
 }
 .foot p{margin:0 0 8px}
+/* ── 페이지 넘김 (항목별 보기) ── */
+#result.paged .sec{display:none}
+#result.paged .sec.page-on{display:block; animation:pgfade .35s ease}
+@keyframes pgfade{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){ #result.paged .sec.page-on{animation:none} }
+.pgnav{
+  position:sticky; top:6px; z-index:15; background:var(--ink);
+  display:flex; gap:7px; overflow-x:auto; padding:8px 2px 10px; margin:0 0 10px;
+  scrollbar-width:thin; -webkit-overflow-scrolling:touch;
+}
+.pgnav button{
+  flex:none; background:var(--panel); color:var(--muted);
+  border:1px solid var(--line-soft); border-radius:999px;
+  padding:7px 14px; font-size:13px; font-family:inherit; cursor:pointer; letter-spacing:.02em;
+}
+.pgnav button:hover{color:var(--paper)}
+.pgnav button[aria-current="page"]{
+  background:var(--panel2); color:var(--gold-bright); border-color:var(--gold);
+}
+.pgbar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  margin-top:40px; border-top:1px solid var(--line-soft); padding-top:16px;
+}
+.pgbar button{
+  background:var(--panel); color:var(--gold-bright); border:1px solid var(--line);
+  border-radius:3px; padding:10px 14px; font-size:13.5px; font-family:inherit; cursor:pointer;
+  max-width:42%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.pgbar button:hover:not(:disabled){border-color:var(--gold)}
+.pgbar button:disabled{opacity:.35; cursor:default}
+.pgbar .pgcount{color:var(--muted); font-size:12.5px; letter-spacing:.08em; font-variant-numeric:tabular-nums}
+@media print{
+  .pgnav,.pgbar{display:none!important}
+  #result.paged .sec{display:block!important}
+}
 </style>
 
 <canvas id="sky" aria-hidden="true"></canvas>
@@ -318,13 +353,14 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 
   <div id="result" aria-live="polite">
     <div id="notices"></div>
+    <nav id="pgnav" class="pgnav" aria-label="풀이 항목" hidden></nav>
 
     <section class="sec">
       <h2 class="sec-title">운수당 상담실 <span class="en">CONSULT</span></h2>
       <div class="sec-rule"></div>
       <div class="chat" id="chat"></div>
       <div class="topics" id="topics"></div>
-      <p class="note-small">상담 내용은 아래 상세 섹션(원국·오행·대운·세운·월운·심화)의 데이터를 대화로 풀어낸 것입니다 — 근거 수치는 아래에서 확인하세요.</p>
+      <p class="note-small">상담 내용은 상세 페이지(원국·오행·대운·세운·월운·심화)의 데이터를 대화로 풀어낸 것입니다 — 근거 수치는 위 항목을 눌러 각 페이지에서 확인하세요.</p>
     </section>
 
     <section class="sec">
@@ -468,6 +504,12 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
         <p class="note-small">궁합 점수는 일간의 합·십신 관계, 일지·년지의 합충, 오행 상호보완을 재미로 셈한 것입니다 — 관계의 주인은 언제나 두 사람입니다.</p>
       </div>
     </section>
+
+    <div id="pgbar" class="pgbar" hidden>
+      <button id="pgPrev" type="button">◀ 이전</button>
+      <span class="pgcount" id="pgCount"></span>
+      <button id="pgNext" type="button">다음 ▶</button>
+    </div>
 
     <div class="foot">
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
@@ -1677,9 +1719,73 @@ $('go').addEventListener('click',()=>{
   $('result').classList.remove('show');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     $('result').classList.add('show');
+    PAGER.open();
     $('result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
   }));
 });
+
+/* ───────── 페이지 넘김 (항목별 보기) ───────── */
+const PAGER=(()=>{
+  const R=$('result');
+  const secs=[...R.querySelectorAll(':scope > .sec')];
+  const nav=$('pgnav'), prev=$('pgPrev'), next=$('pgNext'), cnt=$('pgCount');
+  const OVERRIDE={'운수당 상담실':'상담실'};
+  const names=secs.map(s=>{
+    const h=s.querySelector('.sec-title'); if(!h) return '';
+    const full=[...h.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim();
+    const short=full.split(' — ')[0].trim();
+    return OVERRIDE[full]||OVERRIDE[short]||short;
+  });
+  let cur=0, built=false;
+  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function go(i,scroll){
+    if(i<0||i>=secs.length) return;
+    cur=i;
+    secs.forEach((s,k)=>s.classList.toggle('page-on',k===i));
+    [...nav.children].forEach((b,k)=>{
+      if(k===i){ b.setAttribute('aria-current','page'); b.scrollIntoView({block:'nearest',inline:'nearest'}); }
+      else b.removeAttribute('aria-current');
+    });
+    prev.disabled=(i===0); next.disabled=(i===secs.length-1);
+    prev.textContent=i>0?'◀ '+names[i-1]:'◀ 이전';
+    next.textContent=i<secs.length-1?names[i+1]+' ▶':'다음 ▶';
+    cnt.textContent=(i+1)+' / '+secs.length;
+    if(scroll) nav.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
+  }
+  function build(){
+    if(built) return; built=true;
+    names.forEach((n,i)=>{
+      const b=document.createElement('button'); b.type='button'; b.textContent=n;
+      b.addEventListener('click',()=>go(i,true));
+      nav.appendChild(b);
+    });
+    prev.addEventListener('click',()=>go(cur-1,true));
+    next.addEventListener('click',()=>go(cur+1,true));
+    addEventListener('keydown',e=>{
+      if(!R.classList.contains('show')) return;
+      if(e.target.closest('input,select,textarea,button,details')) return;
+      if(e.key==='ArrowLeft') go(cur-1,true);
+      if(e.key==='ArrowRight') go(cur+1,true);
+    });
+    let tx=null,ty=null;
+    R.addEventListener('touchstart',e=>{
+      if(e.target.closest('.du-scroll,.chart-scroll,.tj-list,.pgnav')){ tx=null; return; }
+      tx=e.touches[0].clientX; ty=e.touches[0].clientY;
+    },{passive:true});
+    R.addEventListener('touchend',e=>{
+      if(tx===null) return;
+      const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty; tx=null;
+      if(Math.abs(dx)>60 && Math.abs(dy)<40) go(cur+(dx<0?1:-1),true);
+    },{passive:true});
+  }
+  function open(){
+    build();
+    R.classList.add('paged');
+    nav.hidden=false; $('pgbar').hidden=false;
+    go(0,false);
+  }
+  return{open,go};
+})();
 
 /* ───────── 별하늘 (정적 캔버스) ───────── */
 (function sky(){
