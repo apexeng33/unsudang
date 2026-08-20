@@ -1,4 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운수당</title>
+<meta name="description" content="생년월일시로 사주 원국·오행 분포·대운을 풀이합니다.">
+<meta property="og:title" content="운수당 運數之堂">
+<meta property="og:description" content="생년월일시로 사주 원국·오행 분포·대운을 풀이합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://apexeng33.github.io/unsudang/">
+<meta name="theme-color" content="#13100B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%23B3392E'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23F2E7DC' font-family='serif'%3E運%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" crossorigin="anonymous">
 <style>
 /* ── 운수당 — 단일 테마(밤하늘 천문도)로 의도적 고정. 모든 색을 명시한다 ── */
 :root{
@@ -18,7 +33,7 @@
 html,body{margin:0;padding:0}
 body{
   background:var(--ink); color:var(--paper);
-  font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif;
+  font-family:'Pretendard Variable',Pretendard,'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif;
   line-height:1.65; font-size:15.5px;
   min-height:100vh;
 }
@@ -37,11 +52,11 @@ header{display:flex; align-items:center; gap:18px; margin-bottom:44px}
 .seal{
   width:52px; height:52px; flex:none; background:var(--seal); border-radius:3px;
   display:grid; place-items:center; box-shadow:0 0 0 1px rgba(0,0,0,.35) inset, 0 2px 10px rgba(179,57,46,.25);
-  font-family:'Batang','바탕',serif; color:#F2E7DC; font-size:15px; line-height:1.15;
+  font-family:'Noto Serif KR','Batang','바탕',serif; color:#F2E7DC; font-size:15px; line-height:1.15;
   text-align:center; letter-spacing:1px;
 }
 h1{
-  font-family:'Batang','바탕',serif; font-size:34px; margin:0; letter-spacing:.14em;
+  font-family:'Noto Serif KR','Batang','바탕',serif; font-size:34px; margin:0; letter-spacing:.14em;
   color:var(--gold-bright); font-weight:600; text-wrap:balance;
 }
 .sub{margin:2px 0 0; color:var(--muted); font-size:13px; letter-spacing:.06em}
@@ -66,7 +81,7 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
 .go{
   margin-top:20px; width:100%;
   background:linear-gradient(180deg,#D8B96E,#B8954C); color:#141005;
-  font-family:'Batang','바탕',serif; font-weight:700; font-size:18px; letter-spacing:.35em; text-indent:.35em;
+  font-family:'Noto Serif KR','Batang','바탕',serif; font-weight:700; font-size:18px; letter-spacing:.35em; text-indent:.35em;
   border:none; border-radius:3px; padding:13px 0; cursor:pointer;
 }
 .go:hover{filter:brightness(1.07)}
@@ -77,10 +92,10 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
 #result.show{display:block}
 .sec{margin-top:44px}
 .sec-title{
-  font-family:'Batang','바탕',serif; color:var(--gold-bright); font-size:20px; letter-spacing:.1em;
+  font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright); font-size:20px; letter-spacing:.1em;
   margin:0 0 6px; display:flex; align-items:baseline; gap:10px;
 }
-.sec-title .en{font-size:11.5px; color:var(--muted); letter-spacing:.2em; font-family:'Malgun Gothic',sans-serif}
+.sec-title .en{font-size:11.5px; color:var(--muted); letter-spacing:.2em; font-family:'Pretendard Variable',Pretendard,'Malgun Gothic',sans-serif}
 .sec-rule{
   height:2px; margin-bottom:20px;
   background:linear-gradient(90deg,
@@ -111,25 +126,25 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
   .pillar{opacity:1!important; transform:none!important; animation:none!important}
 }
 .pillar.me{border-color:var(--gold); box-shadow:0 0 0 1px var(--line) inset}
-.p-name{font-family:'Batang','바탕',serif; color:var(--gold-bright); font-size:16px; letter-spacing:.2em}
+.p-name{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright); font-size:16px; letter-spacing:.2em}
 .p-palace{font-size:11px; color:var(--muted); margin-top:2px; letter-spacing:.04em}
 .p-god{font-size:11.5px; color:var(--gold); margin-top:10px; min-height:17px}
 .glyph{margin-top:4px}
-.glyph .h{font-family:'Batang','바탕',serif; font-size:44px; line-height:1.15; display:block}
+.glyph .h{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:44px; line-height:1.15; display:block}
 .glyph .r{font-size:12px; color:var(--muted); letter-spacing:.05em}
 .el-chip{
   display:inline-block; margin-top:4px; font-size:11px; padding:1px 8px; border-radius:999px;
   border:1px solid var(--line-soft); color:var(--paper); background:var(--panel2);
 }
 .jg{display:block; font-size:9.5px; color:var(--mut); margin-top:4px; letter-spacing:.02em}
-.jg b{font-family:'Batang','바탕',serif; font-weight:400; font-size:12px; cursor:help; margin:0 1px}
+.jg b{font-family:'Noto Serif KR','Batang','바탕',serif; font-weight:400; font-size:12px; cursor:help; margin:0 1px}
 .p-empty{color:var(--muted); font-size:12.5px; padding:36px 0}
 
 /* 오행 분포 */
 .meters{display:flex; flex-direction:column; gap:11px}
 .mrow{display:grid; grid-template-columns:86px 1fr 34px; gap:12px; align-items:center}
 .mname{display:flex; gap:7px; align-items:baseline}
-.mname .h{font-family:'Batang','바탕',serif; font-size:19px}
+.mname .h{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:19px}
 .mname .k{font-size:12px; color:var(--muted)}
 .cells{display:flex; gap:3px}
 .cell{height:14px; flex:1; border-radius:2px; background:rgba(233,228,216,.07)}
@@ -141,10 +156,10 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
 .prose p{margin:0 0 14px}
 .daymaster-head{display:flex; align-items:center; gap:14px; margin-bottom:14px}
 .dm-glyph{
-  font-family:'Batang','바탕',serif; font-size:40px; width:64px; height:64px; flex:none;
+  font-family:'Noto Serif KR','Batang','바탕',serif; font-size:40px; width:64px; height:64px; flex:none;
   display:grid; place-items:center; border:1px solid var(--line); border-radius:4px; background:var(--panel);
 }
-.dm-title{font-family:'Batang','바탕',serif; font-size:19px; color:var(--gold-bright)}
+.dm-title{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:19px; color:var(--gold-bright)}
 .dm-sub{font-size:13px; color:var(--muted)}
 .balist{margin:0; padding:0; list-style:none; max-width:64ch}
 .balist li{margin:0 0 10px; padding-left:16px; position:relative}
@@ -156,7 +171,7 @@ details{
 summary{cursor:pointer; color:var(--gold); letter-spacing:.04em}
 details table{border-collapse:collapse; margin-top:10px}
 details td{padding:3px 14px 3px 0; vertical-align:top; color:var(--paper)}
-details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',serif; white-space:nowrap}
+details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Batang','바탕',serif; white-space:nowrap}
 /* 대운·세운 */
 .du-meta{font-size:12.5px; color:var(--mut); margin:0 0 12px}
 .du-scroll{overflow-x:auto; padding-bottom:8px}
@@ -168,7 +183,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 .du-card.now{border-color:var(--gold); box-shadow:0 0 0 1px var(--line) inset}
 .du-card .age{font-size:9.5px; color:var(--mut); letter-spacing:.04em}
 .du-card.now .age{color:var(--gold-bright); font-weight:700}
-.du-card .gz{font-family:'Batang','바탕',serif; font-size:23px; line-height:1.25; margin:3px 0 1px}
+.du-card .gz{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:23px; line-height:1.25; margin:3px 0 1px}
 .du-card .rd{font-size:9.5px; color:var(--mut)}
 .du-card .god{font-size:10px; color:var(--gold); margin-top:3px}
 .du-read{font-size:13px; color:var(--paper); border-left:2px solid var(--gold);
@@ -193,7 +208,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 @keyframes bubIn{to{opacity:1; transform:none}}
 .bub .av{
   flex:none; width:34px; height:34px; border-radius:4px; background:var(--seal);
-  display:grid; place-items:center; font-family:'Batang','바탕',serif; font-size:11px; color:#F2E7DC;
+  display:grid; place-items:center; font-family:'Noto Serif KR','Batang','바탕',serif; font-size:11px; color:#F2E7DC;
   box-shadow:0 1px 6px rgba(179,57,46,.3);
 }
 .bub .tx{
@@ -215,7 +230,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 /* 토정비결 */
 .tj-now{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:16px 18px; margin-bottom:14px}
 .tj-now .yy{font-size:12px; color:var(--gold); letter-spacing:.1em; margin-bottom:4px}
-.tj-now .gwae{font-family:'Batang','바탕',serif; font-size:19px; color:var(--gold-bright); margin-bottom:8px}
+.tj-now .gwae{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:19px; color:var(--gold-bright); margin-bottom:8px}
 .tj-now p{margin:0 0 6px; font-size:13.5px; max-width:66ch}
 .tj-list{max-height:340px; overflow-y:auto; border:1px solid var(--line-soft); border-radius:4px}
 .tj-row{border-bottom:1px solid var(--line-soft); cursor:pointer}
@@ -223,7 +238,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 .tj-row .head{display:grid; grid-template-columns:112px 120px 1fr; gap:10px; padding:8px 14px; font-size:12.5px; align-items:baseline}
 .tj-row .head:hover{background:var(--panel2)}
 .tj-row .y{color:var(--paper); font-variant-numeric:tabular-nums}
-.tj-row .g{font-family:'Batang','바탕',serif; color:var(--gold-bright)}
+.tj-row .g{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright)}
 .tj-row .s{color:var(--mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .tj-row.now .head{background:rgba(201,169,97,.10)}
 .tj-row.now .y{color:var(--gold-bright); font-weight:700}
@@ -234,17 +249,17 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 /* 궁합 */
 .gh-form{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:18px}
 .gh-score{text-align:center; margin:20px 0 2px}
-.gh-score .num{font-family:'Batang','바탕',serif; font-size:52px; color:var(--gold-bright); font-weight:700}
+.gh-score .num{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:52px; color:var(--gold-bright); font-weight:700}
 .gh-score .lbl{font-size:15px; color:var(--mut); margin-left:4px}
 .gh-band{text-align:center; font-size:14.5px; color:var(--paper); margin:0 0 16px}
 .gh-band b{color:var(--gold-bright)}
 .gh-pair{display:flex; justify-content:center; gap:22px; align-items:center; margin-bottom:8px}
 .gh-pair .p{ text-align:center }
 .gh-pair .p .who{font-size:11px; color:var(--mut); margin-bottom:3px}
-.gh-pair .p .dsg{font-family:'Batang','바탕',serif; font-size:30px}
+.gh-pair .p .dsg{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:30px}
 .gh-pair .amp{color:var(--gold); font-size:18px}
 /* 심화 풀이 */
-.adv-label{font-family:'Batang','바탕',serif; color:var(--gold-bright); font-size:14px; letter-spacing:.06em; margin:26px 0 10px}
+.adv-label{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright); font-size:14px; letter-spacing:.06em; margin:26px 0 10px}
 .adv-label:first-of-type{margin-top:0}
 .chips-row{display:flex; flex-wrap:wrap; gap:8px}
 .tchip{border:1px solid var(--line-soft); background:var(--panel); border-radius:999px;
@@ -255,7 +270,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Batang','바탕',s
 .us-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px}
 .us-card{background:var(--panel); border:1px solid var(--line-soft); border-radius:4px; text-align:center; padding:9px 4px 8px}
 .us-card .w{font-size:10px; color:var(--mut)}
-.us-card .b{font-family:'Batang','바탕',serif; font-size:20px; margin:2px 0}
+.us-card .b{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:20px; margin:2px 0}
 .us-card .st{font-size:13px; color:var(--gold-bright); font-weight:700}
 .us-card .kw{font-size:10px; color:var(--mut); margin-top:2px}
 .adv-lines p{margin:0 0 8px; font-size:13px; padding-left:14px; position:relative; max-width:64ch}
