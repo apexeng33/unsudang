@@ -1588,110 +1588,58 @@ function render(r,useTime){
 $('ghGo').addEventListener('click',gunghap);
 
 /* ── 배경 음악 — 거문고 산조 (끊이지 않는 합성 연주) ── */
-const BGM={ctx:null,master:null,on:true,timers:[],
- GEO:[82.4,110,123.5,146.8,164.8,196,220], // 거문고 저역 산조 음계
+const BGM={ctx:null,master:null,bus:null,on:true,timers:[],
+ /* 조용한 클래식 — 에릭 사티 '짐노페디 1번'(1888, 퍼블릭 도메인) 발췌를
+    펠트 피아노 음색으로 합성. 3박 왈츠(♩≈65): 1박 베이스, 2박 화음, 다섯째 마디부터 선율. */
  init(){ if(this.ctx)return;
   try{this.on=localStorage.getItem('unsu_bgm')!=='off'}catch(e){}
   const C=this.ctx=new (window.AudioContext||window.webkitAudioContext)();
-  this.master=C.createGain();this.master.gain.value=this.on?.34:0;this.master.connect(C.destination);
-  // 공명통 웅웅 — 상시 드론 (무음 구간이 없다)
-  [[55,'sawtooth',150,.035],[110,'triangle',260,.03],[164.8,'sine',400,.018]].forEach(([f,t,lpf,v])=>{
-    const o=C.createOscillator(),g=C.createGain(),lp=C.createBiquadFilter();
-    o.type=t;o.frequency.value=f;lp.type='lowpass';lp.frequency.value=lpf;g.gain.value=v;
-    o.connect(lp);lp.connect(g);g.connect(this.master);o.start();});
+  this.master=C.createGain();this.master.gain.value=this.on?.3:0;this.master.connect(C.destination);
+  this.bus=C.createGain();this.bus.connect(this.master);          // 건반 원음
+  const ir=C.createBuffer(2,C.sampleRate*1.8,C.sampleRate);       // 작은 홀 잔향 (생성 임펄스)
+  for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2.6);}
+  const cv=C.createConvolver();cv.buffer=ir;
+  const wet=C.createGain();wet.gain.value=.34;
+  this.bus.connect(cv);cv.connect(wet);wet.connect(this.master);
   this.schedule();
   $('bgmBtn').textContent=this.on?'♪':'♩';
   $('bgmBtn').style.color=this.on?'var(--gold)':'var(--muted)';},
- note(f,dur,vol,type,det){ if(!this.ctx)return;const C=this.ctx,o=C.createOscillator(),g=C.createGain();
-  o.type=type||'triangle';o.frequency.value=f;if(o.detune&&det)o.detune.value=det;
-  g.gain.setValueAtTime(vol,C.currentTime);
-  g.gain.exponentialRampToValueAtTime(.0001,C.currentTime+dur);
-  o.connect(g);g.connect(this.master);o.start();o.stop(C.currentTime+dur);},
- geo(f,vol,dur){ // 거문고 — 술대 어택 + 굵은 몸통 + 농현(깊은 떨림)
-  if(!this.ctx)return;const C=this.ctx,t0=C.currentTime;dur=dur||3.8;vol=vol||.15;
-  const o=C.createOscillator(),g=C.createGain(),lp=C.createBiquadFilter();
-  o.type='sawtooth';o.frequency.value=f;
-  lp.type='lowpass';lp.frequency.setValueAtTime(900,t0);
-  lp.frequency.exponentialRampToValueAtTime(280,t0+dur*.7);
-  g.gain.setValueAtTime(vol,t0);
-  g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
-  const v=C.createOscillator(),vg=C.createGain(); // 농현 — 반 박자 뒤 깊게
-  v.frequency.value=3.1;vg.gain.setValueAtTime(0,t0);
-  vg.gain.linearRampToValueAtTime(f*.014,t0+.55);
-  v.connect(vg);vg.connect(o.frequency);
-  o.connect(lp);lp.connect(g);g.connect(this.master);
-  o.start(t0);o.stop(t0+dur);v.start(t0);v.stop(t0+dur);
-  this.noiseTick(.045,vol*.8); }, // 술대가 줄을 때리는 소리
- noiseTick(dur,vol){ if(!this.ctx)return;const C=this.ctx,n=C.createBuffer(1,C.sampleRate*dur,C.sampleRate),d=n.getChannelData(0);
-  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
-  const s=C.createBufferSource();s.buffer=n;const lp=C.createBiquadFilter();
-  lp.type='lowpass';lp.frequency.value=700;
-  const g=C.createGain();g.gain.value=vol;
-  s.connect(lp);lp.connect(g);g.connect(this.master);s.start();},
- sulgidung(){ this.geo(55,.14,5.2);this.geo(82.4,.07,5.2); }, // 슬기둥 — 개방현 강타
- DG:[293.7,329.6,392,440,523.3,587.3], // 대금 평취 음계
- daegeum(f,dur,vol){ // 대금 — 시김새(아래서 미끄러져 듦)·요성·숨·청 울림
-  if(!this.ctx)return;const C=this.ctx,t0=C.currentTime;dur=dur||3;vol=vol||.075;
-  const o=C.createOscillator(),g=C.createGain();
-  o.type='sine';
-  o.frequency.setValueAtTime(f*.94,t0);                       // 시김새
-  o.frequency.exponentialRampToValueAtTime(f,t0+.22);
-  o.frequency.setValueAtTime(f,t0+dur-.3);
-  o.frequency.exponentialRampToValueAtTime(f*.965,t0+dur);    // 퇴성
-  const v=C.createOscillator(),vg=C.createGain();             // 요성 — 점점 깊어짐
-  v.frequency.value=4.6;vg.gain.setValueAtTime(0,t0);
-  vg.gain.linearRampToValueAtTime(f*.013,t0+dur*.55);
-  v.connect(vg);vg.connect(o.frequency);
-  g.gain.setValueAtTime(.0001,t0);
-  g.gain.exponentialRampToValueAtTime(vol,t0+.35);
-  g.gain.setValueAtTime(vol,t0+dur-.5);
-  g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
-  o.connect(g);g.connect(this.master);
-  o.start(t0);o.stop(t0+dur);v.start(t0);v.stop(t0+dur);
-  const b=C.createOscillator(),bg=C.createGain();             // 청 울림
-  b.type='sawtooth';b.frequency.value=f*2;
-  const bl=C.createBiquadFilter();bl.type='lowpass';bl.frequency.value=1900;
-  bg.gain.setValueAtTime(.0001,t0);
-  bg.gain.exponentialRampToValueAtTime(vol*.16,t0+.4);
-  bg.gain.exponentialRampToValueAtTime(.0001,t0+dur);
-  b.connect(bl);bl.connect(bg);bg.connect(this.master);
-  b.start(t0);b.stop(t0+dur);
-  this.breath(dur,vol*.5,f); },
- breath(dur,vol,f){ if(!this.ctx)return;const C=this.ctx,n=C.createBuffer(1,C.sampleRate*dur,C.sampleRate),d=n.getChannelData(0);
-  for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-  const s=C.createBufferSource();s.buffer=n;
-  const bp=C.createBiquadFilter();bp.type='bandpass';bp.frequency.value=(f||600)*1.5;bp.Q.value=2.2;
-  const g=C.createGain();g.gain.setValueAtTime(.0001,C.currentTime);
-  g.gain.exponentialRampToValueAtTime(vol*.35,C.currentTime+.3);
-  g.gain.exponentialRampToValueAtTime(.0001,C.currentTime+dur);
-  s.connect(bp);bp.connect(g);g.connect(this.master);s.start();},
- pung(){ [2093,2637].forEach((f,k)=>setTimeout(()=>this.note(f,2.8,.015,'sine'),k*160)); },
- schedule(){ // 대금이 긴 호흡으로 이어 분다 — 음이 겹쳐 끊이지 않는다
-  // 상시 공기 소리 (바람 든 대숲)
-  const C=this.ctx,n=C.createBuffer(1,C.sampleRate*3,C.sampleRate),d=n.getChannelData(0);
-  for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-  const s=C.createBufferSource();s.buffer=n;s.loop=true;
-  const lp=C.createBiquadFilter();lp.type='lowpass';lp.frequency.value=480;
-  const ag=C.createGain();ag.gain.value=.012;
-  s.connect(lp);lp.connect(ag);ag.connect(this.master);s.start();
-  const phrase=()=>{
-   let idx=(Math.random()*this.DG.length)|0, t=0;
-   const len=4+(Math.random()*4|0);
-   for(let k=0;k<len;k++){
-     const f=this.DG[idx=Math.max(0,Math.min(this.DG.length-1,idx+((Math.random()*3|0)-1)))];
-     const dur=2.2+Math.random()*1.6;
-     setTimeout(()=>this.daegeum(f,dur,.07+Math.random()*.02),t*1000);
-     t+=dur-.38;} // 다음 음이 끝나기 전에 겹쳐 든다 — 레가토
-   setTimeout(()=>this.breath(.55,.05,500),(t+.1)*1000); // 숨 고르기
-   this.timers.push(setTimeout(phrase,(t+.75+Math.random()*.9)*1000));};
-  phrase();
-  const pedal=()=>{this.geo(this.GEO[(Math.random()*2)|0],.055,5.5); // 거문고는 낮은 반주로
-   this.timers.push(setTimeout(pedal,8000+Math.random()*5000));};
-  this.timers.push(setTimeout(pedal,4000));
-  const pk=()=>{this.pung();this.timers.push(setTimeout(pk,26000+Math.random()*22000));};
-  this.timers.push(setTimeout(pk,14000));},
+ piano(f,dur,vol){ // 펠트를 낀 피아노 — 여린 어택, 긴 감쇠, 2배음 살짝
+  if(!this.ctx)return;const C=this.ctx,t0=C.currentTime;
+  [[f,'triangle',1,1.5],[f*2,'sine',.2,-2]].forEach(([ff,ty,r,det])=>{
+    const o=C.createOscillator(),g=C.createGain(),lp=C.createBiquadFilter();
+    o.type=ty;o.frequency.value=ff;if(o.detune)o.detune.value=det;
+    lp.type='lowpass';lp.frequency.value=2500;
+    g.gain.setValueAtTime(.0001,t0);
+    g.gain.linearRampToValueAtTime(vol*r,t0+.014);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+    o.connect(lp);lp.connect(g);g.connect(this.bus);
+    o.start(t0);o.stop(t0+dur+.05);});},
+ schedule(){ // 16마디 루프: 4마디 전주 → 선율 프레이즈 2회(긴 끝음) → 2마디 후주
+  const B=.92, M=3*B;
+  const G2=98, D3=146.83,
+        chG=[246.94,293.66,369.99],   // 솔 위 Gmaj7 — B3·D4·F#4
+        chD=[220,277.18,369.99],      // 레 위 D화음 — A3·C#4·F#4
+        F5=739.99,A5=880,G5=783.99,C5=554.37,B4=493.88,D5=587.33,A4=440,F4=369.99;
+  const ev=[], BARS=16;
+  for(let b=0;b<BARS;b++){
+    const g=(b%2===0);
+    ev.push([b*M, g?G2:D3, 2.9, .06]);                            // 1박 베이스
+    (g?chG:chD).forEach(f=>ev.push([b*M+B, f, 2.1, .034]));       // 2박 화음 (2박 유지)
+  }
+  const phrase=(b0,endNote)=>{                                    // 선율: 3마디 9음 + 긴 끝음
+    [F5,A5,G5, F5,C5,B4, C5,D5,A4].forEach((f,k)=>
+      ev.push([(b0+(k/3|0))*M+(k%3)*B, f, 1.6, .075]));
+    ev.push([(b0+3)*M, endNote, 5.2, .07]);
+  };
+  phrase(4,F4); phrase(9,C5);
+  const loop=()=>{
+    ev.forEach(([t,f,d,v])=>this.timers.push(setTimeout(()=>this.piano(f,d,v),t*1000)));
+    this.timers.push(setTimeout(loop,BARS*M*1000));};
+  loop();},
  toggle(){ this.init();this.on=!this.on;
-  this.master.gain.linearRampToValueAtTime(this.on?.32:0,this.ctx.currentTime+.6);
+  this.master.gain.linearRampToValueAtTime(this.on?.3:0,this.ctx.currentTime+.6);
   try{localStorage.setItem('unsu_bgm',this.on?'on':'off')}catch(e){}
   $('bgmBtn').textContent=this.on?'♪':'♩';
   $('bgmBtn').style.color=this.on?'var(--gold)':'var(--muted)';},
