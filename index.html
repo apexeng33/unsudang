@@ -1924,7 +1924,7 @@ const PAGER=(()=>{
       }
       if(shoot){
         const p=(t-shoot.t0)/shoot.life;
-        if(p>=1){ shoot=null; nextShoot=t+16000+Math.random()*26000; }
+        if(p>=1){ shoot=null; nextShoot=t+7000+Math.random()*11000; }
         else{
           const dist=p*.22*w, tail=.05*w*(1-p*.5);
           const X=shoot.sx+shoot.vx*dist, Y=shoot.sy+shoot.vy*dist;
@@ -1943,7 +1943,7 @@ const PAGER=(()=>{
     requestAnimationFrame(loop);
   }
   build(); paint(null);
-  nextShoot=performance.now()+9000+Math.random()*15000;
+  nextShoot=performance.now()+4000+Math.random()*8000;
   requestAnimationFrame(loop);  // 루프는 1회만 기동 — reduced/숨김 상태는 내부 가드가 처리
   if(reduced.addEventListener) reduced.addEventListener('change',()=>{ if(reduced.matches)paint(null); });
   addEventListener('resize',()=>{build(); paint(null);});
