@@ -1892,7 +1892,7 @@ const PAGER=(()=>{
   const c=$('sky'),x=c.getContext('2d');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const PTS=[[.12,.18],[.17,.15],[.22,.155],[.27,.19],[.305,.24],[.355,.235],[.40,.27]];
-  let stars=[],w=0,h=0,dpr=1,shoot=null,nextShoot=0;
+  let stars=[],w=0,h=0,dpr=1,shoots=[],nextShoot=0;
   function build(){
     dpr=devicePixelRatio||1;
     w=c.width=innerWidth*dpr; h=c.height=innerHeight*dpr;
@@ -1915,26 +1915,26 @@ const PAGER=(()=>{
     x.stroke();
     PTS.forEach(p=>{x.beginPath();x.arc(p[0]*w,p[1]*h,1.6*dpr,0,7);
       x.fillStyle='rgba(201,169,97,.35)';x.fill();});
-    // 별똥별 — 이따금 좌하향으로 한 줄기
+    // 별똥별 — 유성우처럼 자주, 동시 최대 3줄기
     if(t!=null){
-      if(!shoot&&t>nextShoot){
+      if(t>nextShoot&&shoots.length<3){
         const ang=Math.PI*(.72+Math.random()*.16);
-        shoot={sx:(.2+Math.random()*.65)*w, sy:(.05+Math.random()*.25)*h,
-               vx:Math.cos(ang), vy:Math.sin(ang), t0:t, life:900};
+        shoots.push({sx:(.2+Math.random()*.65)*w, sy:(.05+Math.random()*.25)*h,
+               vx:Math.cos(ang), vy:Math.sin(ang), t0:t, life:900});
+        nextShoot=t+1500+Math.random()*2500;
       }
-      if(shoot){
-        const p=(t-shoot.t0)/shoot.life;
-        if(p>=1){ shoot=null; nextShoot=t+7000+Math.random()*11000; }
-        else{
-          const dist=p*.22*w, tail=.05*w*(1-p*.5);
-          const X=shoot.sx+shoot.vx*dist, Y=shoot.sy+shoot.vy*dist;
-          const g=x.createLinearGradient(X-shoot.vx*tail,Y-shoot.vy*tail,X,Y);
-          g.addColorStop(0,'rgba(233,228,216,0)');
-          g.addColorStop(1,`rgba(233,228,216,${.5*(1-p)})`);
-          x.strokeStyle=g; x.lineWidth=1.1*dpr; x.beginPath();
-          x.moveTo(X-shoot.vx*tail,Y-shoot.vy*tail); x.lineTo(X,Y); x.stroke();
-        }
-      }
+      shoots=shoots.filter(m=>{
+        const p=(t-m.t0)/m.life;
+        if(p>=1) return false;
+        const dist=p*.22*w, tail=.05*w*(1-p*.5);
+        const X=m.sx+m.vx*dist, Y=m.sy+m.vy*dist;
+        const g=x.createLinearGradient(X-m.vx*tail,Y-m.vy*tail,X,Y);
+        g.addColorStop(0,'rgba(233,228,216,0)');
+        g.addColorStop(1,`rgba(233,228,216,${.5*(1-p)})`);
+        x.strokeStyle=g; x.lineWidth=1.1*dpr; x.beginPath();
+        x.moveTo(X-m.vx*tail,Y-m.vy*tail); x.lineTo(X,Y); x.stroke();
+        return true;
+      });
     }
   }
   let last=0;
@@ -1943,7 +1943,7 @@ const PAGER=(()=>{
     requestAnimationFrame(loop);
   }
   build(); paint(null);
-  nextShoot=performance.now()+4000+Math.random()*8000;
+  nextShoot=performance.now()+1000+Math.random()*2000;
   requestAnimationFrame(loop);  // 루프는 1회만 기동 — reduced/숨김 상태는 내부 가드가 처리
   if(reduced.addEventListener) reduced.addEventListener('change',()=>{ if(reduced.matches)paint(null); });
   addEventListener('resize',()=>{build(); paint(null);});
