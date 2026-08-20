@@ -1917,11 +1917,11 @@ const PAGER=(()=>{
       x.fillStyle='rgba(201,169,97,.35)';x.fill();});
     // 별똥별 — 유성우처럼 자주, 동시 최대 3줄기
     if(t!=null){
-      if(t>nextShoot&&shoots.length<3){
+      if(t>nextShoot&&shoots.length<6){
         const ang=Math.PI*(.72+Math.random()*.16);
         shoots.push({sx:(.2+Math.random()*.65)*w, sy:(.05+Math.random()*.25)*h,
-               vx:Math.cos(ang), vy:Math.sin(ang), t0:t, life:900});
-        nextShoot=t+1500+Math.random()*2500;
+               vx:Math.cos(ang), vy:Math.sin(ang), t0:t, life:700+Math.random()*600});
+        nextShoot=t+150+Math.random()*250;
       }
       shoots=shoots.filter(m=>{
         const p=(t-m.t0)/m.life;
@@ -1943,7 +1943,7 @@ const PAGER=(()=>{
     requestAnimationFrame(loop);
   }
   build(); paint(null);
-  nextShoot=performance.now()+1000+Math.random()*2000;
+  nextShoot=performance.now()+300+Math.random()*700;
   requestAnimationFrame(loop);  // 루프는 1회만 기동 — reduced/숨김 상태는 내부 가드가 처리
   if(reduced.addEventListener) reduced.addEventListener('change',()=>{ if(reduced.matches)paint(null); });
   addEventListener('resize',()=>{build(); paint(null);});
