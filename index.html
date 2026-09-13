@@ -9,14 +9,14 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v27">
+<meta name="version" content="v28">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="운수당 運數之堂">
 <meta name="twitter:description" content="생년월일시로 사주 원국·오행 분포·대운을 풀이합니다.">
 <meta name="referrer" content="no-referrer">
 <link rel="canonical" href="https://apexeng33.github.io/unsudang/">
-<meta name="theme-color" content="#13100B">
+<meta name="theme-color" content="#F3ECDD">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%23B3392E'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23F2E7DC' font-family='serif'%3E運%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,20 +25,21 @@
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" crossorigin="anonymous"></noscript>
 <style>
-/* ── 운수당 — 단일 테마(밤하늘 천문도)로 의도적 고정. 모든 색을 명시한다 ── */
+/* v28: 밝은 한지 테마 (사용자 요청 — 배경을 밝은색으로) */
+/* ── 운수당 — 단일 테마(밝은 한지)로 의도적 고정. 모든 색을 명시한다 ── */
 :root{
-  /* 바탕은 오방 흑(玄) — 먹빛 한지 위에 황(치자)·적(단사) 낙관 */
-  --ink:#13100B; --panel:#1C1811; --panel2:#252017; --field:#171309;
-  --line:rgba(201,169,97,.30); --line-soft:rgba(201,169,97,.14);
-  --gold:#C9A961; --gold-bright:#E9CF93;
-  --paper:#E9E4D8; --muted:#A79D8C; --seal:#B3392E;
+  /* 바탕은 백지 한지(닥종이) — 담박한 종이 위에 묵(墨) 글씨와 황(치자)·적(단사) 낙관 */
+  --ink:#F3ECDD; --panel:#FDFAF1; --panel2:#EAE0C8; --field:#FBF7EC;
+  --line:rgba(90,66,30,.28); --line-soft:rgba(90,66,30,.15);
+  --gold:#7E590F; --gold-bright:#8C5F0C;
+  --paper:#241E14; --muted:#6A5E45; --seal:#B3392E;
   --mut:var(--muted); /* v26: --mut 별칭 — 21곳의 var(--mut)이 본문색으로 떨어지던 것 복구 */
   /* 오행 글자색 = 오방 정색(五方正色): 목·동=청, 화·남=적, 토·중앙=황, 금·서=백, 수·북=흑(먹빛으로 표현).
      색 단독 식별 없음 — 전 요소 한자·한글 라벨 병기 */
-  --wood:#5C8FD6; --fire:#CE5348; --earth:#D9A441; --metal:#EDE7D8; --water:#8B93A3;
-  /* 색동 띠 (오방 정색, 먹 바탕 보정) */
-  --sd-c:#3E6FA3; --sd-j:#BE4237; --sd-h:#DFA93F; --sd-b:#E7DFCC; --sd-g:#4A4238;
-  color-scheme: dark;
+  --wood:#28518C; --fire:#93332A; --earth:#7A5A14; --metal:#525C66; --water:#2A303A;
+  /* 색동 띠 (오방 정색, 한지 바탕 보정) */
+  --sd-c:#2F5FA0; --sd-j:#B8382A; --sd-h:#D9A72A; --sd-b:#FFFFFF; --sd-g:#3A342A;
+  color-scheme: light;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -86,7 +87,7 @@ h1{
 /* ── 입력 ── */
 .card{
   background:var(--panel); border:1px solid var(--line); border-radius:4px;
-  padding:26px 26px 22px; box-shadow:0 8px 30px rgba(0,0,0,.35);
+  padding:26px 26px 22px; box-shadow:0 6px 22px rgba(90,66,30,.16);
 }
 .form-grid{display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end}
 .f{display:flex; flex-direction:column; gap:6px}
@@ -106,6 +107,7 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
   font-family:'Noto Serif KR','Batang','바탕',serif; font-weight:700; font-size:18px; letter-spacing:.35em; text-indent:.35em;
   border:none; border-radius:3px; padding:13px 0; cursor:pointer;
 }
+.go{box-shadow:0 3px 10px rgba(126,89,15,.28)}
 .go:hover{filter:brightness(1.07)}
 .hint{margin:14px 0 0; font-size:12.5px; color:var(--muted)}
 
@@ -123,7 +125,7 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
   background:linear-gradient(90deg,
     var(--sd-c) 0 22px, var(--sd-j) 22px 44px, var(--sd-h) 44px 66px,
     var(--sd-b) 66px 88px, var(--sd-g) 88px 110px,
-    var(--gold) 118px, rgba(201,169,97,0) 100%);
+    var(--gold) 118px, rgba(140,95,12,0) 100%);
 }
 .notice{
   border:1px solid var(--line); border-left:3px solid var(--gold); background:var(--panel);
@@ -178,7 +180,7 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
 .mname .h{font-family:'Noto Serif KR','Batang','바탕',serif; font-size:19px}
 .mname .k{font-size:12px; color:var(--muted)}
 .cells{display:flex; gap:3px}
-.cell{height:14px; flex:1; border-radius:2px; background:rgba(233,228,216,.07)}
+.cell{height:14px; flex:1; border-radius:2px; background:rgba(36,30,20,.08)}
 .mcount{font-variant-numeric:tabular-nums; text-align:right; color:var(--paper); font-size:14px}
 .yy{margin-top:16px; font-size:13.5px; color:var(--muted)}
 
@@ -231,7 +233,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 .cp-cell.center .dnm{color:var(--gold); font-size:14px}
 .cp-badge{display:inline-block; margin:3px 2px 0; padding:2px 8px; border-radius:999px; font-size:11px; white-space:nowrap}
 .cp-badge.g{background:rgba(212,175,55,.13); color:var(--gold-bright); border:1px solid rgba(212,175,55,.55)}
-.cp-badge.b{background:rgba(179,57,46,.15); color:#E08A7F; border:1px solid rgba(179,57,46,.6)}
+.cp-badge.b{background:rgba(179,57,46,.15); color:#93332A; border:1px solid rgba(179,57,46,.6)}   /* v28: 밝은 바탕 대비 보정(구 #E08A7F 2.48:1→7:1대) */
 
 /* 상담실 (대화형 풀이) */
 .chat{display:flex; flex-direction:column; gap:11px}
@@ -251,7 +253,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 .bub .tx .term{color:var(--gold); border-bottom:1px dotted var(--gold)}
 .topics{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; padding-left:45px}
 .topics button{
-  background:var(--panel2); color:var(--gold-bright); border:1px solid var(--line);
+  background:var(--panel2); color:var(--gold); border:1px solid var(--line);   /* v28: 밝은 바탕에서 작은 글자 대비 4.26→4.8대(AA) */
   border-radius:999px; padding:9px 16px; /* v26: 터치 타깃(토픽) ≥36px */ font-size:13px; font-family:inherit; cursor:pointer;
 }
 .topics button:hover{border-color:var(--gold)}
@@ -275,7 +277,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 .tj-row .y{color:var(--paper); font-variant-numeric:tabular-nums}
 .tj-row .g{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright)}
 .tj-row .s{color:var(--mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.tj-row.now .head{background:rgba(201,169,97,.10)}
+.tj-row.now .head{background:rgba(140,95,12,.14)}
 .tj-row.now .y{color:var(--gold-bright); font-weight:700}
 .tj-row .body{display:none; padding:2px 14px 12px; font-size:13px; color:var(--paper)}
 .tj-row.open .body{display:block}
@@ -653,7 +655,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v27 · 2026-09-13</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v28 · 2026-09-13</p>
     </div>
   </div>
 </div>
@@ -1654,7 +1656,7 @@ function render(r,useTime){
     if(Math.abs(s-r.ds)===5) dnotes.push('일간과 <b>천간합</b> — 마음 맞는 사람과 뜻이 모이는 날입니다.');
     const lun=solar2lunar(dt.getFullYear(),dt.getMonth()+1,dt.getDate());
     const sonless=!!(lun&&(lun.d%10===9||lun.d%10===0));
-    const grade=score>=2?['◎','길일','var(--gold-bright)']:score<=-2?['△','조심','#E08A7F']:['○','보통','var(--mut)'];
+    const grade=score>=2?['◎','길일','var(--gold-bright)']:score<=-2?['△','조심','#93332A']:['○','보통','var(--mut)'];   /* v28: 밝은 바탕 대비 보정 */
     let body=TAG('흐 름',DAY_GOD[god])+TAG('기 조',`${st12}의 자리 — ${US_KW[st12]}.`);
     if(dnotes.length) body+=TAG('변 수',dnotes.join(' '));
     const yl2=(yongEl>=0&&(STEM_EL[s]===yongEl||BR_EL[b]===yongEl))
@@ -1703,7 +1705,7 @@ function render(r,useTime){
     `<p><b style="color:var(--gold)">귀인방 ${gwiDirs.join('·')}</b> — 내 일간(${STEM_H[r.ds]})의 천을귀인 방위입니다. 부탁·상담·중요한 미팅 등 <b>도움을 구하는 일</b>은 이 방향의 장소가 힘이 됩니다.</p>
      <p><b style="color:var(--gold)">문창방 ${munDir}</b> — 문창귀인의 방위입니다. 공부·시험·집필 등 <b>머리 쓰는 자리</b>(책상 방향)는 이쪽이 맑습니다.</p>`+
     (yongEl>=0?`<p><b style="color:var(--gold)">용신방 ${EL_DIR[yongEl]}</b> — 내게 필요한 ${EL[yongEl].k}(${EL[yongEl].h}) 기운의 방위입니다(간이 억부 판정)${/* v26: 용신방 간이 판정 표기 */''}${yongEl===2?' — 중앙이니 멀리 가기보다 제자리를 다지는 쪽이 약입니다':'. 이사·여행지·자리 배치를 고를 때 참고하세요'}.</p>`:'')+
-    `<p style="margin-top:10px"><b style="color:#E08A7F">올해(${r.seBase}년, ${BR_K[seYb]}년)의 민속 흉방</b> — <b>삼살방 ${samsal}</b> · <b>대장군방 ${daejang}</b> · <b>세파방 ${sepa}</b>. 이사·개업·증축처럼 큰 움직임은 이 방향을 피한다는 세시 전통이 있습니다. 해가 바뀌면(입춘) 방위도 바뀝니다.</p>`+
+    `<p style="margin-top:10px"><b style="color:#93332A">올해(${r.seBase}년, ${BR_K[seYb]}년)의 민속 흉방</b> — <b>삼살방 ${samsal}</b> · <b>대장군방 ${daejang}</b> · <b>세파방 ${sepa}</b>. 이사·개업·증축처럼 큰 움직임은 이 방향을 피한다는 세시 전통이 있습니다. 해가 바뀌면(입춘) 방위도 바뀝니다.</p>`+
     /* v26: 길방·흉방 동일 칸 안내 */
     `<p style="margin-top:6px;color:var(--muted)">길방과 흉방이 같은 칸에 겹치면 <b>목적별로</b> 읽으세요 — 부탁·미팅·공부처럼 사람과 머리를 쓰는 일은 길방으로, 이사·개업처럼 큰 움직임은 흉방으로 봅니다.</p>`;
 
@@ -2169,16 +2171,16 @@ const PAGER=(()=>{
   function paint(t){
     x.clearRect(0,0,w,h);
     for(const s of stars){
-      const tw=(t!=null&&s.rr>.55)?Math.sin(t*.001*s.sp+s.ph)*.05:0; // 밝은 별만 은은히 숨쉼
+      const tw=(t!=null&&s.rr>.55)?Math.sin(t*.001*s.sp+s.ph)*.05:0; // 짙은 낟알만 은은히 숨쉼
       x.beginPath(); x.arc(s.px,s.py,(s.rr*1.1+.3)*dpr,0,7);
-      x.fillStyle=`rgba(233,228,216,${Math.max(.02,.04+s.rr*.10+tw)})`; x.fill();
+      x.fillStyle=`rgba(36,30,20,${Math.max(.02,.04+s.rr*.10+tw)})`; x.fill();   /* v28: 한지 섬유 낟알(먹빛) — 원래는 밤하늘 별(--paper) */
     }
     // 북두칠성 비슷한 잔별 자리 하나 (은은한 금선)
-    x.strokeStyle='rgba(201,169,97,.13)'; x.lineWidth=1*dpr; x.beginPath();
+    x.strokeStyle='rgba(126,89,15,.22)'; x.lineWidth=1*dpr; x.beginPath();   /* v28: 금선 대비 보정(밝은 바탕) */
     PTS.forEach((p,i)=>{const X=p[0]*w,Y=p[1]*h; i?x.lineTo(X,Y):x.moveTo(X,Y);});
     x.stroke();
     PTS.forEach(p=>{x.beginPath();x.arc(p[0]*w,p[1]*h,1.6*dpr,0,7);
-      x.fillStyle='rgba(201,169,97,.35)';x.fill();});
+      x.fillStyle='rgba(126,89,15,.55)';x.fill();});   /* v28: 금점 대비 보정(밝은 바탕) */
     // 별똥별 — 유성우처럼 자주, 동시 최대 3줄기
     if(t!=null){
       if(t>nextShoot&&shoots.length<3){ /* v26: 유성 동시 3개 상한(주석과 일치) */
@@ -2193,8 +2195,8 @@ const PAGER=(()=>{
         const dist=p*.22*w, tail=.05*w*(1-p*.5);
         const X=m.sx+m.vx*dist, Y=m.sy+m.vy*dist;
         const g=x.createLinearGradient(X-m.vx*tail,Y-m.vy*tail,X,Y);
-        g.addColorStop(0,'rgba(233,228,216,0)');
-        g.addColorStop(1,`rgba(233,228,216,${.5*(1-p)})`);
+        g.addColorStop(0,'rgba(36,30,20,0)');   /* v28: 별똥별 꼬리(먹빛) — 원래는 밤하늘(--paper) */
+        g.addColorStop(1,`rgba(36,30,20,${.55*(1-p)})`);
         x.strokeStyle=g; x.lineWidth=1.1*dpr; x.beginPath();
         x.moveTo(X-m.vx*tail,Y-m.vy*tail); x.lineTo(X,Y); x.stroke();
         return true;
