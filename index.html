@@ -9,14 +9,15 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v30">
+<meta name="version" content="v31">
+<!-- v31: 배경 더 밝게 + 미혼/기혼(선택) 입력 및 관계 문구 분기 (사용자 요청) -->
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="운수당 運數之堂">
 <meta name="twitter:description" content="생년월일시로 사주 원국·오행 분포·대운을 풀이합니다.">
 <meta name="referrer" content="no-referrer">
 <link rel="canonical" href="https://apexeng33.github.io/unsudang/">
-<meta name="theme-color" content="#F3ECDD">
+<meta name="theme-color" content="#FAF6EC">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%23B3392E'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23F2E7DC' font-family='serif'%3E運%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +30,7 @@
 /* ── 운수당 — 단일 테마(밝은 한지)로 의도적 고정. 모든 색을 명시한다 ── */
 :root{
   /* 바탕은 백지 한지(닥종이) — 담박한 종이 위에 묵(墨) 글씨와 황(치자)·적(단사) 낙관 */
-  --ink:#F3ECDD; --panel:#FDFAF1; --panel2:#EAE0C8; --field:#FBF7EC;
+  --ink:#FAF6EC; --panel:#FFFEFA; --panel2:#F2EAD6; --field:#FEFCF6;
   --line:rgba(90,66,30,.28); --line-soft:rgba(90,66,30,.15);
   --gold:#7E590F; --gold-bright:#8C5F0C;
   --paper:#241E14; --muted:#6A5E45; --seal:#B3392E;
@@ -483,7 +484,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <div class="f"><label for="d">일</label><select id="d"></select></div>
 <!-- v29: 시각 입력을 오전/오후·시·분 select로 교체 (사용자 요청) -->
       <div class="f"><label id="tLbl">태어난 시각</label><div class="timesel"><select id="tAmpm" aria-label="태어난 시각 오전/오후"><option value="AM">오전</option><option value="PM" selected>오후</option></select><select id="tH" aria-label="태어난 시각 시"><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12" selected>12시</option></select><select id="tMi" aria-label="태어난 시각 분"><option value="0" selected>00분</option><option value="1">01분</option><option value="2">02분</option><option value="3">03분</option><option value="4">04분</option><option value="5">05분</option><option value="6">06분</option><option value="7">07분</option><option value="8">08분</option><option value="9">09분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select></div></div>
-      <div class="f"><label for="sex">성별 (대운 계산용)</label><select id="sex"><option value="M">남자</option><option value="F">여자</option></select></div>
+      <div class="f"><label for="sex">성별 (대운 계산용)</label><select id="sex"><option value="M">남자</option><option value="F">여자</option></select></div><div class="f"><label for="marital">혼인 상태 (선택)</label><select id="marital"><option value="" selected>선택 안 함</option><option value="single">미혼</option><option value="married">기혼</option></select></div>
     </div>
     <div class="checks">
       <label><input type="checkbox" id="noTime"> 태어난 시각을 몰라요 (시주 제외)</label>
@@ -675,7 +676,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v30 · 2026-09-13</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v31 · 2026-09-13</p>
     </div>
   </div>
 </div>
@@ -970,6 +971,7 @@ const TJ_JUNG=[
  '분주한 가운데 실속을 챙겨야 하니 열 가지보다 한 가지에 마음을 두세요.',
  '집안과 몸을 먼저 살피세요 — 안이 편해야 밖의 일도 순히 풀립니다.',
 ];
+function tjJung(i,marital){ return i===3?(marital==='married'?'묵은 일이 다시 떠오르니 깨끗이 매듭지을 좋은 기회입니다.':'옛 인연이 다시 찾아오니 지난 일을 매듭지을 좋은 기회입니다.'):TJ_JUNG[i]; }
 const TJ_HA=[
  '가을 곳간이 차듯 끝맺음이 좋으니 결실을 이웃과 나누면 복이 두 배가 됩니다.',
  '늦게 피는 꽃이 더 향기로우니 조급함만 내려놓으면 뜻이 이루어집니다.',
@@ -1595,7 +1597,7 @@ function render(r,useTime){
     brPos.forEach(([w,ob])=>{
       const hk=hyeongKind(b,ob); if(hk) out.push(`${w}(${BR_H[ob]})와 ${hk==='상형'?'상형':'형'} — 가까운 사이의 신경전 주의, 정중함이 약입니다.`); /* v26: 형 공용표(세운·월운) — 육합보다 먼저 검사해 巳申이 합에 묻히지 않게 */
       if(pairIn(CHUNG,b,ob)) out.push(`${w}(${BR_H[ob]})와 충 — ${scope==='y'?'환경·자리의 변동수(이사·이직·이동)가 큰 해이니 변화를 계획 안으로 끌어들이세요.':'일정 변동·이동수가 생기기 쉬우니 약속에 여유 버퍼를 두세요.'}`);
-      else if(pairIn(YUKHAP,b,ob)) out.push(`${w}(${BR_H[ob]})와 합 — ${scope==='y'?'귀한 인연이 맺어지는 해입니다. 협업·계약·혼사 등 손잡는 일에 순풍이 붑니다.':'손잡을 인연이 들어오니 협업 제안에 열려 있으세요.'}`);
+      else if(pairIn(YUKHAP,b,ob)) out.push(`${w}(${BR_H[ob]})와 합 — ${scope==='y'?(r.marital==='single'?'귀한 인연이 맺어지는 해입니다. 협업·계약은 물론 혼사까지, 손잡는 일마다 순풍이 붑니다.':r.marital==='married'?'귀한 인연이 맺어지는 해입니다. 협업·계약 등 손잡는 일에 순풍이 붙고, 곁의 인연과는 호흡이 한층 깊어집니다.':'귀한 인연이 맺어지는 해입니다. 협업·계약·혼사 등 손잡는 일에 순풍이 붑니다.'):'손잡을 인연이 들어오니 협업 제안에 열려 있으세요.'}`);
       else if(TRI[b]===TRI[ob]&&b!==ob) out.push(`${w}(${BR_H[ob]})와 삼합 기운 — 같은 국의 지원군이 생깁니다.`);
     });
     if(Math.abs(s-r.ds)===5) out.push(scope==='y'?'그 해 천간이 일간과 합 — 나를 알아주는 사람·기회와 깊이 엮이는 해입니다.':'월간이 일간과 천간합 — 뜻이 맞는 사람과 의기투합하기 좋은 달입니다.');
@@ -1737,7 +1739,7 @@ function render(r,useTime){
   const moList=t=>Array.from({length:12},(_,i)=>`<p><b style="color:var(--gold)">${i+1}월</b> ${tjMonth(t,i+1)}</p>`).join('');
   $('tjNow').innerHTML=`<div class="yy">올해의 괘 · ${nowYr}년 (${tn.age}세) · 음력 생일 ${bl.m}월 ${bl.d}일${bl.leap?'(윤달)':''}</div>
     <div class="gwae">${TJ_NUM[tn.sang-1]}·${TJ_NUM[tn.jung-1]}·${TJ_NUM[tn.ha-1]} ${TJ_SANG[tn.sang-1][0]} 괘</div>
-    <p>${TJ_SANG[tn.sang-1][1]}</p><p>${TJ_JUNG[tn.jung-1]}</p><p>${TJ_HA[tn.ha-1]}</p>
+    <p>${TJ_SANG[tn.sang-1][1]}</p><p>${tjJung(tn.jung-1,r.marital)}</p><p>${TJ_HA[tn.ha-1]}</p>
     <details style="border:none;background:none;padding:6px 0 0"><summary>올해 열두 달 풀이 (음력 달 기준)</summary>${moList(tn)}</details>`;
   const TL=$('tjList'); TL.innerHTML='';
   for(let yy=bl.by;yy<=2066;yy++){
@@ -1747,7 +1749,7 @@ function render(r,useTime){
     row.innerHTML=`<button type="button" class="head"><span class="y">${yy===nowYr?'▶ ':''}${yy}년 · ${t.age}세${t.approx?' ≈':''}</span>
       <span class="g">${TJ_NUM[t.sang-1]}·${TJ_NUM[t.jung-1]}·${TJ_NUM[t.ha-1]} ${TJ_SANG[t.sang-1][0]}</span>
       <span class="s">${TJ_SANG[t.sang-1][1]}</span></button>
-      <div class="body"><p>${TJ_SANG[t.sang-1][1]}</p><p>${TJ_JUNG[t.jung-1]}</p><p>${TJ_HA[t.ha-1]}</p>
+      <div class="body"><p>${TJ_SANG[t.sang-1][1]}</p><p>${tjJung(t.jung-1,r.marital)}</p><p>${TJ_HA[t.ha-1]}</p>
       <div style="margin-top:8px;border-top:1px solid var(--line-soft);padding-top:8px">${moList(t)}</div></div>`;
     accHead(row); /* v26 */
     TL.appendChild(row);
@@ -1965,7 +1967,7 @@ function render(r,useTime){
       const dj=hits.filter(h=>h[0]==='도화'||h[0]==='천을귀인');
       if(dj.length) o.push(`명식에 ${dj.map(h=>`<b>${h[1].split(' ')[0]} ${h[0]}</b>`).join('과 ')}이 있어요 — ${dj.some(h=>h[0]==='도화')?'사람을 끌어당기는 매력이 타고났고, ':''}${dj.some(h=>h[0]==='천을귀인')?'힘들 때 돕는 손이 나타나는 복이 있습니다.':''}`);
       const ji=interLines(nowSe.s,nowSe.b,'y').filter(t=>t.includes('합'));
-      o.push(ji.length?`올해는 특히 — ${ji.join(' ')} 새 인연이든 오랜 인연이든, 올해 맺는 매듭은 단단합니다.`:`올해 세운에 큰 합은 없지만, 궁합 섹션에서 특정 상대와의 결을 직접 비교해 볼 수 있어요.`);
+      o.push(ji.length?`올해는 특히 — ${ji.join(' ')} ${r.marital==='single'?'새 인연이든 오랜 인연이든, 올해 맺는 매듭은 유난히 단단합니다 — 마음 가는 만남이 있다면 붙잡아 보세요.':r.marital==='married'?'오랜 인연의 결속이 한층 단단해지는 해이니, 곁에 있는 사람에게 마음을 쏟아 보세요.':'새 인연이든 오랜 인연이든, 올해 맺는 매듭은 단단합니다.'}`:`올해 세운에 큰 합은 없지만, 궁합 섹션에서 특정 상대와의 결을 직접 비교해 볼 수 있어요.`);
       return o;
     },
     '건강':()=>{
@@ -2089,6 +2091,7 @@ $('go').addEventListener('click',()=>{
   if(useTime&&!(Number.isFinite(hh)&&Number.isFinite(mi)&&hh>=0&&hh<=23&&mi>=0&&mi<=59)) return toastMsg('시각은 HH:MM 형식(00:00~23:59)으로 입력해 주세요'); /* v26: 시각 입력 NaN 가드 (CQ-13) — 나 */
   const r=compute(y,m,d,useTime?hh:12,useTime?mi:0,useTime,$('solarAdj').checked&&useTime);
   r.calNote=calNote;
+  r.marital=$('marital').value;
   render(r,useTime);
   $('result').classList.remove('show');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
