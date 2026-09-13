@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v28">
+<meta name="version" content="v29">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="운수당 運數之堂">
@@ -92,6 +92,8 @@ h1{
 .form-grid{display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end}
 .f{display:flex; flex-direction:column; gap:6px}
 .f label{font-size:12px; color:var(--gold); letter-spacing:.08em}
+.timesel{display:flex; gap:6px}
+.timesel select{min-width:0; padding:9px 6px}
 select,input[type="time"]{
   background:var(--field); color:var(--paper); border:1px solid var(--line-soft);
   border-radius:3px; padding:9px 10px; font-size:16px; /* v26: iOS 포커스 확대 방지(<16px 금지) */ font-family:inherit;
@@ -464,7 +466,8 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <div class="f"><label for="y">태어난 해</label><select id="y"></select></div>
       <div class="f"><label for="m">월</label><select id="m"></select></div>
       <div class="f"><label for="d">일</label><select id="d"></select></div>
-      <div class="f"><label for="t">태어난 시각</label><input type="time" id="t" value="12:00"><!-- /* v26: 기본 시각 중립 */ --></div>
+<!-- v29: 시각 입력을 오전/오후·시·분 select로 교체 (사용자 요청) -->
+      <div class="f"><label id="tLbl">태어난 시각</label><div class="timesel"><select id="tAmpm" aria-label="태어난 시각 오전/오후"><option value="AM">오전</option><option value="PM" selected>오후</option></select><select id="tH" aria-label="태어난 시각 시"><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12" selected>12시</option></select><select id="tMi" aria-label="태어난 시각 분"><option value="0" selected>00분</option><option value="1">01분</option><option value="2">02분</option><option value="3">03분</option><option value="4">04분</option><option value="5">05분</option><option value="6">06분</option><option value="7">07분</option><option value="8">08분</option><option value="9">09분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select></div></div>
       <div class="f"><label for="sex">성별 (대운 계산용)</label><select id="sex"><option value="M">남자</option><option value="F">여자</option></select></div>
     </div>
     <div class="checks">
@@ -631,7 +634,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
           <div class="f"><label for="py">상대방 태어난 해</label><select id="py"></select></div>
           <div class="f"><label for="pm">월</label><select id="pm"></select></div>
           <div class="f"><label for="pd">일</label><select id="pd"></select></div>
-          <div class="f"><label for="pt">시각</label><input type="time" id="pt" value="12:00"></div>
+          <div class="f"><label id="ptLbl">시각</label><div class="timesel"><select id="ptAmpm" aria-label="상대방 시각 오전/오후"><option value="AM">오전</option><option value="PM" selected>오후</option></select><select id="ptH" aria-label="상대방 시각 시"><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12" selected>12시</option></select><select id="ptMi" aria-label="상대방 시각 분"><option value="0" selected>00분</option><option value="1">01분</option><option value="2">02분</option><option value="3">03분</option><option value="4">04분</option><option value="5">05분</option><option value="6">06분</option><option value="7">07분</option><option value="8">08분</option><option value="9">09분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select></div></div>
         </div>
         <div class="checks"><label><input type="checkbox" id="pNoTime" checked> 상대방 시각 몰라요</label></div>
         <button class="go" id="ghGo" style="margin-top:14px">궁합 보기</button>
@@ -655,7 +658,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v28 · 2026-09-13</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v29 · 2026-09-13</p>
     </div>
   </div>
 </div>
@@ -1272,6 +1275,7 @@ function compute(y,mo,d,hh,mi,useTime,adjust){
 
 /* ───────── UI ───────── */
 const $=id=>document.getElementById(id);
+function hm24(pfx){ const ap=$(pfx+'Ampm').value, h=+$(pfx+'H').value, m=+$(pfx+'Mi').value; let hh=h%12; if(ap==='PM') hh+=12; return [hh,m]; }   /* v29: 오전/오후·시·분 select → 24시간 [시,분] */
 /* v26: 아코디언 head 접근성 — <button class="head">에 aria-expanded/aria-controls를 달고 클릭·Enter·Space로 토글 */
 let ACC_N=0;
 function accHead(row){
@@ -1308,8 +1312,8 @@ function fillSelects(){
   };
   py.value=2000; pm.value=6; fillPDays(); pd.value=15; /* v26: 상대 기본값 중립 날짜 */
   py.onchange=pm.onchange=fillPDays;
-  $('pNoTime').addEventListener('change',e=>{ $('pt').disabled=e.target.checked; });
-  $('pt').disabled=true;
+  $('pNoTime').addEventListener('change',e=>{ ['ptAmpm','ptH','ptMi'].forEach(id=>$(id).disabled=e.target.checked); });
+  ['ptAmpm','ptH','ptMi'].forEach(id=>$(id).disabled=true);
 }
 
 function elCount(rr,useT){
@@ -1323,7 +1327,7 @@ function gunghap(){
   const r=window._lastR; if(!r) return;
   const y=+$('py').value,m=+$('pm').value,d=+$('pd').value;
   const useT=!$('pNoTime').checked;
-  const [hh,mi]=($('pt').value||'12:00').split(':').map(Number);
+  const [hh,mi]=hm24('pt');
   if(useT&&!(Number.isFinite(hh)&&Number.isFinite(mi)&&hh>=0&&hh<=23&&mi>=0&&mi<=59)) return toastMsg('상대방 시각은 HH:MM 형식(00:00~23:59)으로 입력해 주세요'); /* v26: 시각 입력 NaN 가드 (CQ-13) — 상대 */
   const adj=$('solarAdj').checked&&useT;         /* v26: 상대도 '나'와 같은 진태양시 보정 정책 (F7) */
   const p=basePillars(y,m,d,useT?hh:12,useT?mi:0,useT,adj);
@@ -1391,7 +1395,7 @@ function fillDays(){
   for(let i=1;i<=n;i++) d.add(new Option(i+'일',i));
   d.value=Math.min(keep,n);
 }
-$('noTime').addEventListener('change',e=>{ $('t').disabled=e.target.checked; });
+$('noTime').addEventListener('change',e=>{ ['tAmpm','tH','tMi'].forEach(id=>$(id).disabled=e.target.checked); });
 
 function glyphHTML(stemOrBranch,isStem,extra){
   const h=isStem?STEM_H[stemOrBranch]:BR_H[stemOrBranch];
@@ -2064,7 +2068,7 @@ $('go').addEventListener('click',()=>{
     y=sol.y; m=sol.m; d=sol.d;
   }
   const useTime=!$('noTime').checked;
-  const [hh,mi]=($('t').value||'12:00').split(':').map(Number);
+  const [hh,mi]=hm24('t');
   if(useTime&&!(Number.isFinite(hh)&&Number.isFinite(mi)&&hh>=0&&hh<=23&&mi>=0&&mi<=59)) return toastMsg('시각은 HH:MM 형식(00:00~23:59)으로 입력해 주세요'); /* v26: 시각 입력 NaN 가드 (CQ-13) — 나 */
   const r=compute(y,m,d,useTime?hh:12,useTime?mi:0,useTime,$('solarAdj').checked&&useTime);
   r.calNote=calNote;
