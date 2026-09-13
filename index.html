@@ -9,7 +9,8 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v34">
+<meta name="version" content="v35">
+<!-- v35: 이야기 모드 되돌림 — 항목별 보기가 다시 기본, 상담실 서사 문단만 유지 (사용자 요청) -->
 <!-- v34: 결과를 하나의 이야기 흐름으로 재구성 — 이야기 모드 기본, 항목별 보기 토글 (사용자 요청) -->
 <!-- v33: 토정비결 항목 삭제 + 강제 다크 모드 방지 보강 (사용자 요청) -->
 <!-- v31: 배경 더 밝게 + 미혼/기혼(선택) 입력 및 관계 문구 분기 (사용자 요청) -->
@@ -80,7 +81,7 @@ html,body{margin:0;padding:0}
   #pdfBtn{top:auto; bottom:18px; right:66px}
 }
 /* v30: PDF 캡처 모드 — 입력폼·내비 숨김, 전 항목 펼침, 가로/세로 스크롤 해제 */
-body.pdfmode .card,body.pdfmode #bgmBtn,body.pdfmode #pdfBtn,body.pdfmode #storyToggle,body.pdfmode .pgnav,body.pdfmode .pgbar{display:none!important}
+body.pdfmode .card,body.pdfmode #bgmBtn,body.pdfmode #pdfBtn,body.pdfmode .pgnav,body.pdfmode .pgbar{display:none!important}
 body.pdfmode #result{display:block!important}
 body.pdfmode #result.paged .sec{display:block!important}
 body.pdfmode .chart-scroll,body.pdfmode .du-scroll,body.pdfmode .tj-list{overflow:visible!important; max-height:none!important}
@@ -319,9 +320,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
 .story-line{font-family:'Noto Serif KR','Batang','바탕',serif; font-style:italic; color:var(--gold-bright);
   font-size:14.5px; line-height:1.55; margin:0 0 18px; padding-left:14px; border-left:2px solid var(--line); max-width:60ch}
 .story-line b{font-weight:700}
-.story-toggle{display:block; margin:0 auto 18px; padding:9px 20px; font-size:13px; border-radius:999px;
-  border:1px solid var(--line); background:var(--panel); color:var(--gold-bright); cursor:pointer}
-.story-toggle:hover{border-color:var(--gold)}
 /* 궁합 */
 .gh-form{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:18px}
 .gh-score{text-align:center; margin:20px 0 2px}
@@ -520,7 +518,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
   <div id="srStatus" class="sr-only" role="status"></div>
   <div id="result">
     <div id="notices"></div>
-    <button type="button" id="storyToggle" class="story-toggle" hidden>📑 항목별로 보기</button>
     <nav id="pgnav" class="pgnav" aria-label="풀이 항목" hidden></nav>
 
     <section class="sec">
@@ -535,7 +532,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">사주 원국 <span class="en">FOUR PILLARS</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">여행자의 <b>여권</b> 첫 장에는 언제나 도착 도장이 찍혀 있죠 — 당신이 처음 이 세상에 도착하던 순간, 여덟 글자가 그렇게 새겨졌어요.</p>
       <div class="chart-scroll"><div class="pillars" id="pillars"></div></div>
       <p class="hint" style="text-align:right">◀ 전통 방식대로 오른쪽(년주)부터 읽습니다</p>
     </section>
@@ -543,7 +539,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">오행의 저울 <span class="en">FIVE ELEMENTS</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">이 여덟 글자 안에는, 여행자가 애초에 챙겨온 <b>다섯 기운의 짐</b>이 저마다 다른 무게로 나뉘어 담겨 있어요.</p>
       <div class="meters" id="meters"></div>
       <p class="yy" id="yinyang"></p>
     </section>
@@ -551,7 +546,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">일간 — 나의 그릇 <span class="en">DAY MASTER</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line" id="storyDaymaster"></p>
       <div class="daymaster-head">
         <div class="dm-glyph" id="dmGlyph"></div>
         <div><div class="dm-title" id="dmTitle"></div><div class="dm-sub" id="dmSub"></div></div>
@@ -569,7 +563,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">대운의 흐름 <span class="en">DECADE CYCLES</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line" id="storyDaeun"></p>
       <p class="du-meta" id="duMeta"></p>
       <div class="du-scroll"><div class="du-strip" id="duStrip"></div></div>
       <p class="du-read" id="duRead"></p>
@@ -578,7 +571,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">세운 — 해마다의 운 <span class="en">YEARLY CYCLES</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line" id="storySeun"></p>
       <div class="du-scroll"><div class="du-strip" id="seStrip"></div></div>
       <p class="du-read" id="seRead"></p>
       <div class="tj-list" id="seList" style="margin-top:14px; max-height:420px"></div>
@@ -588,7 +580,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">월운 — 올해 열두 달 <span class="en">MONTHLY CYCLES</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">그 정거장 안에서도 지금 당신이 지나고 있는 <b>골목</b>은 이번 달이에요.</p>
       <div class="du-scroll"><div class="du-strip" id="moStrip"></div></div>
       <p class="du-read" id="moRead"></p>
       <div class="tj-list" id="moList" style="margin-top:14px; max-height:420px"></div>
@@ -598,7 +589,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">일운 — 오늘과 앞으로 열나흘 <span class="en">DAILY CYCLES</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">그 골목 끝, 지금 당신의 <b>발밑</b>에 닿아 있는 하루는 다름 아닌 오늘이에요.</p>
       <p class="du-read" id="dayRead"></p>
       <div class="tj-list" id="dayList" style="margin-top:14px; max-height:460px"></div>
       <p class="note-small">일별 풀이는 그 날 일진(60갑자)의 십신, 일간의 12운성, 내 일지와의 충·합·삼합, 천을귀인, 용신 정렬을 조합한 해석입니다. 등급은 ◎ 길일 · ○ 보통 · △ 조심 세 단계이며, 음력 끝자리 9·0일은 <b>손없는날</b>로 표시합니다.</p>
@@ -608,7 +598,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">심화 풀이 <span class="en">ADVANCED</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">지금까지 짚어온 하루·달·해의 흐름은 사실 <b>한 가지 계산</b> 위에서 움직이고 있었어요 — 그 뒤편의 이야기를 조금 더 짚어볼게요.</p>
       <div class="adv-label">십성의 저울 — 다섯 기운의 분포</div>
       <div class="chips-row" id="tenDist"></div>
       <p class="adv-note" id="tenNote"></p>
@@ -630,7 +619,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">길방과 흉방 — 방위 나침반 <span class="en">DIRECTIONS</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">그 뒤편의 이야기까지 들었다면, 이제 당신 손에 <b>나침반</b> 하나를 쥐어드릴게요.</p>
       <div class="compass" id="compass"></div>
       <div class="adv-lines" id="dirLines"></div>
       <p class="note-small">방위와 글자의 빛깔은 한국 전통 <b>오방색(五方色)</b>을 따랐습니다 — 동·목 청(靑), 남·화 적(赤), 중앙·토 황(黃), 서·금 백(白), 북·수 흑(黑, 먹빛으로 표현). 흉방(삼살방·대장군방·세파방)은 문헌·세시 자료로 확인되는 민속 전통이며(입춘 세수 기준), 길방(귀인방·문창방·용신방)은 명리의 귀인 지지·용신 오행을 방위(12지 30°분할·오행 방위)에 응용한 <b>이 앱의 해석</b>입니다 — 전통 이사방위처럼 정해진 규칙이 아니니 가볍게 참고하세요. 흉방 역시 조상들의 신중함 장치일 뿐, 절대 규칙이 아닙니다.</p>
@@ -639,7 +627,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">저울의 조언 <span class="en">BALANCE</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">나침반을 손에 쥐었다면, 이제 그 방향으로 걸음을 살짝 고쳐 디딜 <b>마지막 당부</b>를 전할게요.</p>
       <ul class="balist" id="balance"></ul>
       <details>
         <summary>십신(十神) 간단 풀이 보기</summary>
@@ -659,7 +646,6 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
     <section class="sec">
       <h2 class="sec-title">궁합 — 두 사람의 사주 <span class="en">COMPATIBILITY</span></h2>
       <div class="sec-rule"></div>
-      <p class="story-line">이 길을 혼자 걷지 않는다면, 이제 <b>두 사람의 지도</b>를 나란히 펼쳐볼 차례예요 — 여덟 글자에서 시작해 오늘 하루까지, 당신이라는 이야기를 여기까지 함께 읽어드렸습니다.</p>
       <div class="gh-form">
         <div class="form-grid">
           <div class="f"><label for="py">상대방 태어난 해</label><select id="py"></select></div>
@@ -689,7 +675,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v34 · 2026-09-13</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v35 · 2026-09-13</p>
     </div>
   </div>
 </div>
@@ -1990,12 +1976,8 @@ $('go').addEventListener('click',()=>{
   $('result').classList.remove('show');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     $('result').classList.add('show');
-    PAGER.story();
-    $('storyDaymaster').innerHTML=`그 짐을 지고 이 길을 걷는 주인공의 정체는, 일간 <b>'${STEM_K[r.ds]}'</b>예요.`;
-    $('storyDaeun').innerHTML=`그 그릇을 안고 살아가는 ${STEM_K[r.ds]} 일간 앞에, 이제 <b>10년 단위로 이어지는 길</b> 전체가 한눈에 펼쳐집니다.`;
-    $('storySeun').innerHTML=`그 길 위에서 지금 당신이 두 발로 서 있는 <b>정거장</b>은, 바로 ${r.seBase}년이에요.`;
+    PAGER.open();
     $('pdfBtn').hidden=false;
-    $('storyToggle').hidden=false; $('storyToggle').textContent='📑 항목별로 보기';
     $('result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
   }));
 });
@@ -2050,14 +2032,14 @@ const PAGER=(()=>{
     prev.addEventListener('click',()=>go(cur-1,true));
     next.addEventListener('click',()=>go(cur+1,true));
     addEventListener('keydown',e=>{
-      if(!R.classList.contains('show')||!R.classList.contains('paged')) return;
+      if(!R.classList.contains('show')) return;
       if(e.target.closest('input,select,textarea,button,details')) return;
       if(e.key==='ArrowLeft') go(cur-1,true);
       if(e.key==='ArrowRight') go(cur+1,true);
     });
     let tx=null,ty=null;
     R.addEventListener('touchstart',e=>{
-      if(!R.classList.contains('paged')||e.target.closest('.du-scroll,.chart-scroll,.tj-list,.pgnav')){ tx=null; return; }
+      if(e.target.closest('.du-scroll,.chart-scroll,.tj-list,.pgnav')){ tx=null; return; }
       tx=e.touches[0].clientX; ty=e.touches[0].clientY;
     },{passive:true});
     R.addEventListener('touchend',e=>{
@@ -2073,14 +2055,7 @@ const PAGER=(()=>{
     go(0,false);
     const sr=$('srStatus'); if(sr) sr.textContent='풀이가 준비되었습니다 · '+sr.textContent; /* v26: 풀이 준비 낭독 */
   }
-  function story(){
-    build();
-    R.classList.remove('paged');
-    secs.forEach(s=>s.classList.remove('page-on'));
-    nav.hidden=true; $('pgbar').hidden=true;
-    const sr=$('srStatus'); if(sr) sr.textContent='이야기 모드로 전체 풀이가 준비되었습니다';
-  }
-  return{open,go,story};
+  return{open,go};
 })();
 
 /* ───────── 별하늘 (살아있는 캔버스 — 반짝임·별똥별) ───────── */
@@ -2150,11 +2125,6 @@ const PAGER=(()=>{
 })();
 
 fillSelects();
-
-$('storyToggle').addEventListener('click',()=>{
-  if($('result').classList.contains('paged')){ PAGER.story(); $('storyToggle').textContent='📑 항목별로 보기'; }
-  else { PAGER.open(); $('storyToggle').textContent='🧭 이야기로 읽기'; }
-});
 if(location.search.includes('demo')){ $('go').click(); setTimeout(()=>$('ghGo').click(),400); }
 </script>
 <!-- v30: 결과 PDF 저장 기능 추가 (html2canvas+jsPDF, PDFX) -->
