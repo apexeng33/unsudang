@@ -9,7 +9,8 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v37">
+<meta name="version" content="v38">
+<!-- v38: 사주 원국 카드 화려하게 — 선명한 글자·채운 배지·그라데이션 (사용자 요청) -->
 <!-- v37: 사주 원국 카드 배경을 오행색 틴트로 (사용자 요청) -->
 <!-- v36: 세운 페이지 넘기기(올해 기본, 더 자세히) + 저울의 조언 보강·details 2개 삭제 (사용자 요청) -->
 <!-- v35: 이야기 모드 되돌림 — 항목별 보기가 다시 기본, 상담실 서사 문단만 유지 (사용자 요청) -->
@@ -211,6 +212,23 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
 .pillar.el-3 .el-chip{border-color:var(--metal)}
 .pillar.el-4 .el-chip{border-color:var(--water)}
 .pillar .el-chip{background:var(--panel)}
+/* v38: 화려하게 — 선명한 오행색 글자(44px, 모든 틴트에서 3:1 이상), 흰 글자 채운 배지(6.3:1 이상),
+   아래로 짙어지는 틴트(상단 글자 gold-bright는 밝은 쪽, 하단 muted 글자는 짙은 쪽에서 모두 AA) */
+.glyph .h.e-0{color:#1D5FC4} .glyph .h.e-1{color:#C8301C} .glyph .h.e-2{color:#946200}
+.glyph .h.e-3{color:#4A6A8A} .glyph .h.e-4{color:#1A2B5C}
+.pillar .glyph .h{text-shadow:0 1px 0 rgba(255,255,255,.65), 0 2px 6px rgba(36,30,20,.10)}
+.pillar .el-chip{color:#FFFFFF; font-weight:700; border-width:0; padding:2px 10px}
+.pillar .el-chip.e-0{background:var(--wood)} .pillar .el-chip.e-1{background:var(--fire)}
+.pillar .el-chip.e-2{background:var(--earth)} .pillar .el-chip.e-3{background:var(--metal)}
+.pillar .el-chip.e-4{background:var(--water)}
+.pillar{border-top-width:6px}
+.pillar.el-0{background:linear-gradient(180deg,#E6EEF7 0%,#D6E4F5 100%)}
+.pillar.el-1{background:linear-gradient(180deg,#F9E3DE 0%,#F7D9D2 100%)}
+.pillar.el-2{background:linear-gradient(180deg,#F6E8C4 0%,#F1DFA9 100%)}
+.pillar.el-3{background:linear-gradient(180deg,#F0F1F1 0%,#E6E8EA 100%)}
+.pillar.el-4{background:linear-gradient(180deg,#E9ECF1 0%,#DCE1EA 100%)}
+.pillar.me{border-color:var(--gold); box-shadow:0 0 0 2px var(--gold) inset, 0 6px 18px rgba(126,89,15,.18)}
+.pillar .p-name{color:var(--gold); font-weight:700}
 .p-name{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright); font-size:16px; letter-spacing:.2em}
 .p-palace{font-size:11px; color:var(--muted); margin-top:2px; letter-spacing:.04em}
 .p-god{font-size:11.5px; color:var(--gold); margin-top:10px; min-height:17px}
@@ -691,7 +709,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v37 · 2026-09-14</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v38 · 2026-09-14</p>
     </div>
   </div>
 </div>
@@ -1342,9 +1360,9 @@ function glyphHTML(stemOrBranch,isStem,extra){
   const el=isStem?STEM_EL[stemOrBranch]:BR_EL[stemOrBranch];
   const jang=isStem?'':`<span class="jg">지장간 ${JANG[stemOrBranch].map(s=>
     `<b title="${tenGod(curDS,s)}" style="color:${EL[STEM_EL[s]].c}">${STEM_H[s]}</b>`).join('')}</span>`;
-  return `<div class="glyph"><span class="h" style="color:${EL[el].c}">${h}</span>
+  return `<div class="glyph"><span class="h e-${el}">${h}</span>
     <span class="r">${k}${extra||''}</span><br>
-    <span class="el-chip">${EL[el].h} ${EL[el].k}</span>${jang}</div>`;
+    <span class="el-chip e-${el}">${EL[el].h} ${EL[el].k}</span>${jang}</div>`;
 }
 function render(r,useTime){
   curDS=r.ds; window._lastR=r; window._lastUseTime=useTime;
