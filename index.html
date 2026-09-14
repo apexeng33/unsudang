@@ -9,7 +9,8 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apexeng33.github.io/unsudang/">
 <!-- /* v26: 공유·보안 메타 — 버전 표식·og:locale·twitter:card·referrer·canonical (og:image 는 외부 이미지가 없어 보류) */ -->
-<meta name="version" content="v36">
+<meta name="version" content="v37">
+<!-- v37: 사주 원국 카드 배경을 오행색 틴트로 (사용자 요청) -->
 <!-- v36: 세운 페이지 넘기기(올해 기본, 더 자세히) + 저울의 조언 보강·details 2개 삭제 (사용자 요청) -->
 <!-- v35: 이야기 모드 되돌림 — 항목별 보기가 다시 기본, 상담실 서사 문단만 유지 (사용자 요청) -->
 <!-- v34: 결과를 하나의 이야기 흐름으로 재구성 — 이야기 모드 기본, 항목별 보기 토글 (사용자 요청) -->
@@ -197,6 +198,19 @@ select:focus,input:focus,button:focus{outline:2px solid var(--gold); outline-off
   .pillar{opacity:1!important; transform:none!important; animation:none!important}
 }
 .pillar.me{border-color:var(--gold); box-shadow:0 0 0 1px var(--line) inset}
+/* v37: 기둥 카드 오행색 — 천간 오행 기준 틴트 배경 + 상단 띠 (틴트는 카드 안 글자색 전부 AA 이상으로 검증) */
+.pillar{border-top:4px solid var(--line)}
+.pillar.el-0{background:#E6EEF7; border-top-color:var(--wood)}
+.pillar.el-1{background:#F9E3DE; border-top-color:var(--fire)}
+.pillar.el-2{background:#F6E8C4; border-top-color:var(--earth)}
+.pillar.el-3{background:#F0F1F1; border-top-color:var(--metal)}
+.pillar.el-4{background:#E9ECF1; border-top-color:var(--water)}
+.pillar.el-0 .el-chip{border-color:var(--wood)}
+.pillar.el-1 .el-chip{border-color:var(--fire)}
+.pillar.el-2 .el-chip{border-color:var(--earth)}
+.pillar.el-3 .el-chip{border-color:var(--metal)}
+.pillar.el-4 .el-chip{border-color:var(--water)}
+.pillar .el-chip{background:var(--panel)}
 .p-name{font-family:'Noto Serif KR','Batang','바탕',serif; color:var(--gold-bright); font-size:16px; letter-spacing:.2em}
 .p-palace{font-size:11px; color:var(--muted); margin-top:2px; letter-spacing:.04em}
 .p-god{font-size:11.5px; color:var(--gold); margin-top:10px; min-height:17px}
@@ -677,7 +691,7 @@ details td:first-child{color:var(--gold-bright); font-family:'Noto Serif KR','Ba
       <p><b style="color:var(--gold)">계산 기준</b> — 양력 생일 · 절기(節氣)는 태양 황경을 천문 계산식으로 구해 년주(입춘)·월주 경계를 정합니다 · 진태양시 보정은 한국 표준시 기준 −30분 · 밤 11시 이후 출생은 다음 날 일주로 계산합니다(야자시) · 대운은 양남음녀 순행/음남양녀 역행, 대운수는 절입일까지 3일=1년 환산 · 세운의 해 경계는 입춘입니다.</p>
       <p id="dstNote" style="display:none">참고: 출생 당시의 한국 표준시(1954~61년 UTC+8:30, 1948~51·1955~60·1987~88년 서머타임 +1시간)를 자동 반영해 계산합니다.</p><!-- v26: 역사적 시간대 안내 -->
       <p>사주풀이는 오랜 세월 이어져 온 동양의 시간 해석법입니다. 삶의 참고와 재미로 읽어 주세요 — 운명의 주인은 언제나 자신입니다.</p>
-      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v36 · 2026-09-13</p>
+      <!-- /* v26: 버전 표식 */ --><p id="verLine" style="font-size:11.5px;opacity:.8">운수당 v37 · 2026-09-14</p>
     </div>
   </div>
 </div>
@@ -1343,7 +1357,7 @@ function render(r,useTime){
   ];
   defs.forEach(p=>{
     const div=document.createElement('div');
-    div.className='pillar'+(p.me?' me':'');
+    div.className='pillar'+(p.me?' me':'')+(p.empty?'':' el-'+STEM_EL[p.s]);
     if(p.empty){
       div.innerHTML=`<div class="p-name">${p.name}</div><div class="p-palace">${p.palace}</div>
         <div class="p-empty">출생 시각을 몰라<br>비워 둡니다</div>`;
